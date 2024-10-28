@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import time
 import subprocess
-import telepot
+import python-telegram-bot
 import os
 import urllib2
 import re
