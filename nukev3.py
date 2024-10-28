@@ -1,18 +1,17 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import time
 import subprocess
 import telepot
 import os
-import urllib2
+import urllib.request as urllib2  # Updated for Python 3.x
 import re
 import socket
 import datetime
 import threading
-from urllib2 import urlopen
+from urllib.request import urlopen
 from alexa import Alexa
 from config import token_id
-
 
 banner = '''
         \xF0\x9F\x9A\x80Welcome to SqlNuke\xF0\x9F\x9A\x80
@@ -39,11 +38,11 @@ menu = '''
 6.  `/getdorklist` - Download the latest DorkList Data.
 7.  `/torstart` - Start the TOR Network.
 8.  `/torstop` - Stop the TOR Network.
-9.  `/sqlidata` - Download the all SQLi Data.
-10. `/meminfo` - Check the memory utilization.
-11. `/cpuloadinfo` - Check the CPU Utilization.
+9.  `/sqlidata` - Download all SQLi Data.
+10. `/meminfo` - Check memory utilization.
+11. `/cpuloadinfo` - Check CPU Utilization.
 12. `/checksqli`   - Check SQLi Running Process.
-13. `/killsqli` - Kill all the sqli Running Process.
+13. `/killsqli` - Kill all SQLi Running Processes.
 14. `/buy` - SQLnuKe Store.
 '''
 
@@ -51,31 +50,32 @@ def nuke(msg):
         chat_id = msg['chat']['id']
         command = msg['text']
 
-        print "Got Command : %s " %command
-        #bot.sendMessage(chat_id, str(banner))
-	
-	#welcome screen and help
-	if command.startswith('help') or command.startswith('/help') or command.startswith('/start'):
-        	bot.sendMessage(chat_id, str(banner))
-		bot.sendMessage(chat_id,'\xF0\x9F\x94\x90 SQLnuKe MENU: ')
-		bot.sendMessage(chat_id,'1. [nukedork] Search the SQLi \xF0\x9F\x92\x89 | Usage eg: -> nukedork index.php?id=1\n')
-		bot.sendMessage(chat_id,'2. [sqlgdork] Search the SQLi \xF0\x9F\x92\x89 with Goole| Usage eg: -> sqlgdork about.php?id=1\n')
-		bot.sendMessage(chat_id,'3. [sqlihack] Perform the SQLi \xF0\x9F\x92\x89 without TOR | Usage eg: -> sqlihack http|https://<url>\n')
-		bot.sendMessage(chat_id,'4. [sqlitor]  Perform the SQLi \xF0\x9F\x92\x89 with TOR | Usage eg: -> sqlitor http|https://<url>\n')
-		bot.sendMessage(chat_id,'5. BTC Rate : example -> btc usd or btc anycurrency')
-		bot.sendMessage(chat_id, str(menu))
-		return 0
-	#end welcome
-	def runoscmd(cmd):
-		process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		output = process.stdout.read()
-		error = process.stderr.read()
-		process.stdout.close()
-		process.wait()
-		if error:
-			return None
-		return output
-
+        print("Got Command : %s " % command)  # Updated to Python 3 print syntax
+        
+        # Welcome screen and help
+        if command.startswith('help') or command.startswith('/help') or command.startswith('/start'):
+            bot.sendMessage(chat_id, str(banner))
+            bot.sendMessage(chat_id, '\xF0\x9F\x94\x90 SQLnuKe MENU: ')
+            bot.sendMessage(chat_id, '1. [nukedork] Search the SQLi \xF0\x9F\x92\x89 | Usage eg: -> nukedork index.php?id=1\n')
+            bot.sendMessage(chat_id, '2. [sqlgdork] Search the SQLi \xF0\x9F\x92\x89 with Google| Usage eg: -> sqlgdork about.php?id=1\n')
+            bot.sendMessage(chat_id, '3. [sqlihack] Perform the SQLi \xF0\x9F\x92\x89 without TOR | Usage eg: -> sqlihack http|https://<url>\n')
+            bot.sendMessage(chat_id, '4. [sqlitor]  Perform the SQLi \xF0\x9F\x92\x89 with TOR | Usage eg: -> sqlitor http|https://<url>\n')
+            bot.sendMessage(chat_id, '5. BTC Rate : example -> btc usd or btc anycurrency')
+            bot.sendMessage(chat_id, str(menu))
+            return 0
+        
+        # Define remaining functions...
+        
+        def runoscmd(cmd):
+            process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output = process.stdout.read()
+            error = process.stderr.read()
+            process.stdout.close()
+            process.wait()
+            if error:
+                return None
+            return output
+        
 	def getMemoryInfo():
 		output = runoscmd("`which free` -m")
 		if output:
