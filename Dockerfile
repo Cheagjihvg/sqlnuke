@@ -9,8 +9,8 @@ ENV NIXPACKS_PATH=/opt/venv/bin:$NIXPACKS_PATH
 # Create the virtual environment
 RUN python -m venv --copies /opt/venv
 
-# Install dependencies using pip from the venv with cache
-RUN --mount=type=cache,target=/root/.cache/pip \
+# Use pip from the venv and mount the cache correctly
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     /opt/venv/bin/pip install --no-cache-dir -r /app/requirements.txt
 
 # Set the working directory
